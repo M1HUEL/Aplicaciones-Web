@@ -24,6 +24,27 @@
 | GET | `/api/ordenes/{id}` | Cliente (dueño) | Detalle de la orden. |
 | POST | `/api/ordenes/{id}/cancelar` | Cliente (dueño) | Cancela la orden y repone el stock. |
 
+## Entidades
+
+| Entidad | Tabla | Descripción | Relaciones |
+|---|---|---|---|
+| `Usuario` | `usuarios` | Cuenta con nombre, correo único, contraseña y rol. | Tiene un `Carrito`, direcciones y órdenes. |
+| `Direccion` | `direcciones` | Dirección de envío, con bandera `predeterminada`. | Pertenece a `Usuario`; se usa en `Envio`. |
+| `Autor` | `autores` | Autor con nombre, apellido y nacionalidad. | Muchos a muchos con `Libro`. |
+| `Categoria` | `categorias` | Categoría del catálogo. | Uno a muchos con `Libro`. |
+| `Editorial` | `editoriales` | Editorial del libro. | Uno a muchos con `Libro`. |
+| `Libro` | `libros` | Obra con ISBN, sinopsis, portada y páginas. | `Categoria`, `Editorial`, autores y `FormatoLibro`. |
+| `FormatoLibro` | `formatos_libro` | Presentación del libro con su precio. | Pertenece a `Libro`; se referencia desde items y stock. |
+| `ItemStock` | `items_stock` | Existencias y stock mínimo por formato. | Uno a uno con `FormatoLibro`. |
+| `AjusteInventario` | `ajustes_inventario` | Movimiento de inventario con cantidad y motivo. | Pertenece a `ItemStock`. |
+| `Carrito` | `carritos` | Carrito activo de un usuario. | Uno a uno con `Usuario`; contiene `ItemCarrito`. |
+| `ItemCarrito` | `items_carrito` | Línea del carrito con cantidad y precio unitario. | `Carrito` y `FormatoLibro`. |
+| `Orden` | `ordenes` | Orden de compra con número único y estado. | Pertenece a `Usuario`; contiene `ItemOrden`. |
+| `ItemOrden` | `items_orden` | Línea de la orden con el precio histórico. | `Orden` y `FormatoLibro`. |
+| `Descarga` | `descargas` | Enlace de descarga de un libro digital comprado. | Uno a uno con `ItemOrden`. |
+| `Pago` | `pagos` | Pago con método, monto y estado. | Uno a uno con `Orden`. |
+| `Envio` | `envios` | Datos de envío con paquetería y número de guía. | `Orden` y `Direccion`. |
+
 ## Excepciones personalizadas
 
 | Excepción | HTTP | Uso previsto |

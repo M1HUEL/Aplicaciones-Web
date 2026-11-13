@@ -37,7 +37,8 @@ public class SecurityConfig {
       .sessionManagement(sesion ->
         sesion.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
       .authorizeHttpRequests(autorizacion -> autorizacion
-        .requestMatchers(HttpMethod.POST, "/api/auth/iniciar-sesion").permitAll()
+        .requestMatchers(HttpMethod.POST, "/api/auth/iniciar-sesion", "/api/auth/login", "/api/auth/registro").permitAll()
+        .requestMatchers(HttpMethod.GET, "/api/libros/**", "/api/categorias/**", "/api/autores/**").permitAll()
         .requestMatchers("/error").permitAll()
         .anyRequest().authenticated())
       .exceptionHandling(excepciones -> excepciones
